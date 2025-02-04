@@ -28,9 +28,7 @@ else:
 print(f'''
 Window Screen width = {SCREEN_WIDTH}
 Window Screen height = {SCREEN_HEIGHT}
-
-      
-      ''')
+''')
 
 '''
 16:9 resolutions
