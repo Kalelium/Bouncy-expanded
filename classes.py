@@ -12,6 +12,8 @@ class ScaleManager():
 
 	Attributes:
 		scale: number used for scaling everything esle
+
+	CURRENTLY USELESS!!
 	
 	'''
 	def __init__(self, scale: int):
@@ -391,7 +393,7 @@ class RandomRectPlacer:
 		self.rect_number = 0
 
 
-	def spawn_rectangles(self, fps, delay : int):
+	def spawn_rectangles(self, fps, delay: int):
 		frames_to_wait = fps * delay
 
 		if self.frame == frames_to_wait:

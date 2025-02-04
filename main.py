@@ -1,21 +1,22 @@
-# pygame -> engine, os -> helps with closing app, shared_resources -> stores info multiple files need at once, classes -> all classes
+# pygame -> engine, shared_resources -> stores info multiple files need at once, classes -> all classes
 import pygame
 import sys
 from shared_resources import SCREEN_WIDTH, SCREEN_HEIGHT, screen, universal_scale as US
-from classes import SimpleButton, Text, MultiSpriteImage, RicochetingSprite, RandomRectPlacer, ScaleManager
+from classes import SimpleButton, Text, MultiSpriteImage, RicochetingSprite, RandomRectPlacer
 
 # pygame setup
 pygame.init()
 clock = pygame.time.Clock()
 pygame.display.set_caption('DVD Logo')
 
-# colors (R, G, B) | 0 -> 255
+# colors (R, G, B) | range: 0 -> 255
 white = (255, 255, 255)
 gray = (128, 128, 128)
 dark_blue_gray = (50, 55, 65)
 
 # variables
-s = ScaleManager(US)
+fps: int = 60
+player_money = 0
 
 bottom_panel = pygame.Rect(0, #left 
                             (SCREEN_HEIGHT * 5/6), #top
@@ -24,8 +25,6 @@ bottom_panel = pygame.Rect(0, #left
                            )
 
 print(bottom_panel)
-
-player_money = 0
 
 # class definitions
 dvd_logo = RicochetingSprite(surface = screen, 
@@ -38,7 +37,13 @@ dvd_logo = RicochetingSprite(surface = screen,
                              boundary_width = SCREEN_WIDTH, 
                              boundary_height = SCREEN_HEIGHT*5/6)
 
-currency_spawner = RandomRectPlacer(screen, 50 * US, 50 * US, None, (0, 0), SCREEN_WIDTH, SCREEN_HEIGHT*5/6)
+currency_spawner = RandomRectPlacer(surface = screen, 
+                                    rect_width = 50 * US, 
+                                    rect_height = 50 * US, 
+                                    color = None, 
+                                    boundary_coordinates = (0, 0), 
+                                    boundary_width = SCREEN_WIDTH, 
+                                    boundary_height = SCREEN_HEIGHT*5/6)
 
 player_money_text = Text(surface = screen, 
                         font = None, 
@@ -53,6 +58,7 @@ player_money_text = Text(surface = screen,
                         use_center = False)
 print(player_money_text.coordinates)
 
+''' not in use
 blue_stars = MultiSpriteImage(screen, (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), 12, True, 1, 6, 'assets/blue_stars.png', None)
 blue_stars = MultiSpriteImage(surface = screen, 
                               coordinates = (SCREEN_WIDTH//2, SCREEN_HEIGHT//3), 
@@ -63,7 +69,7 @@ blue_stars = MultiSpriteImage(surface = screen,
                               sprite_sheet_path = None,
                               folder_path = 'test images'
                               )
-
+'''
 #upgrade_button = SimpleButton(screen, (SCREEN_WIDTH//2, SCREEN_HEIGHT*0.75), None, 10, 2, 'assets/upgrade_button.png', None, None)
 
 
@@ -91,7 +97,7 @@ while running:
     #blue_stars.draw()
 
     pygame.draw.rect(screen, gray, bottom_panel)
-    currency_spawner.spawn_rectangles(60, 1)
+    currency_spawner.spawn_rectangles(fps, 1)
     dvd_logo.draw()
 
     collided_keys = []  # List to keep track of keys to remove
@@ -115,7 +121,7 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(fps)  # limits FPS to 60
 
 pygame.quit()
 sys.exit()
